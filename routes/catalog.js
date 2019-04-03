@@ -5,6 +5,7 @@ var router = express.Router();
 var book_controller = require('../controllers/bookController');
 var author_controller = require('../controllers/authorController');
 var genre_controller = require('../controllers/genreController');
+var editorial_controller = require('../controllers/editorialController');
 var book_instance_controller = require('../controllers/bookinstanceController');
 
 /// BOOK ROUTES ///
@@ -113,5 +114,32 @@ router.get('/bookinstance/:id', book_instance_controller.bookinstance_detail);
 
 // GET request for list of all BookInstance.
 router.get('/bookinstances', book_instance_controller.bookinstance_list);
+
+
+/// EDITORIAL ROUTES ///
+
+// GET request for creating a Genre. NOTE This must come before route that displays Genre (uses id).
+router.get('/editorial/create', editorial_controller.editorial_create_get);
+
+//POST request for creating Genre.
+router.post('/editorial/create', editorial_controller.editorial_create_post);
+
+// GET request to delete Genre.
+router.get('/editorial/:id/delete', editorial_controller.editorial_delete_get);
+
+// POST request to delete Genre.
+router.post('/editorial/:id/delete', editorial_controller.editorial_delete_post);
+
+// GET request to update Genre.
+router.get('/editorial/:id/update', editorial_controller.editorial_update_get);
+
+// POST request to update Genre.
+router.post('/editorial/:id/update', editorial_controller.editorial_update_post);
+
+// GET request for one Genre.
+router.get('/editorial/:id', editorial_controller.editorial_detail);
+
+// GET request for list of all Genre.
+router.get('/editorials', editorial_controller.editorial_list);
 
 module.exports = router;

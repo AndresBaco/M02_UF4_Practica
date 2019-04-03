@@ -23,6 +23,21 @@ block content
           else
             option(value=author._id) #{author.name}
     div.form-group
+      label(for='editorial') Editorial:
+      select#editorial.form-control(type='select' placeholder='Select editorial' name='editorial' required='true' )
+        for editorial in editorials
+          if book
+            //- Handle GET form, where book.editorial is an object, and POST form, where it is a string.
+            option(
+              value=editorial._id
+              selected=(
+                editorial._id.toString()==book.editorial._id
+                || editorial._id.toString()==book.editorial
+              ) ? 'selected' : false
+            ) #{editorial.name}
+          else
+            option(value=editorial._id) #{editorial.name}        
+    div.form-group
       label(for='summary') Summary:
       input#summary.form-control(type='textarea', placeholder='Summary' name='summary' value=(undefined===book ? '' : book.summary) required='true')
     div.form-group
