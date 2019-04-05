@@ -29,7 +29,7 @@ exports.editorial_detail = function(req, res, next) {
         },
 
         editorial_books: function(callback) {
-          Editorial.find({ 'editorial': req.params.id })
+          Book.find({ 'editorial': req.params.id })
           .exec(callback);
         },
 
