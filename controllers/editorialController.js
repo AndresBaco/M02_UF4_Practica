@@ -5,8 +5,7 @@ var async = require('async');
 const { body,validationResult } = require('express-validator/check');
 const { sanitizeBody } = require('express-validator/filter');
 
-// Display list of all Genre.
-exports.editorial_list = function(req, res, next) {
+exports.editorial_list = function(req, res, next) { //Funcio per llistar les editorials
 
   Editorial.find()
     .sort([['name', 'ascending']])
@@ -18,13 +17,12 @@ exports.editorial_list = function(req, res, next) {
 
 };
 
-// Display detail page for a specific Genre.
-exports.editorial_detail = function(req, res, next) {
+exports.editorial_detail = function(req, res, next) { //Funció show per una editorial
 
     async.parallel({
-        editorial: function(callback) {
+        editorial: function(callback) {  
 
-            Editorial.findById(req.params.id)
+            Editorial.findById(req.params.id) //Busquem la editorial per la id
               .exec(callback);
         },
 
@@ -46,15 +44,14 @@ exports.editorial_detail = function(req, res, next) {
 
 };
 
-// Display Genre create form on GET.
+// Redirecciona al formulari per crear una editorial
 exports.editorial_create_get = function(req, res, next) {
     res.render('editorial_form', { title: 'Create Editorial'});
 };
 
-// Handle Genre create on POST.
 exports.editorial_create_post = [
 
-    // Validate that the name field is not empty.
+    // Valida que el nom no estigui buit
     body('name', 'Editorial name required').isLength({ min: 1 }).trim(),
 
     // Sanitize (trim) the name field.
@@ -66,7 +63,7 @@ exports.editorial_create_post = [
         // Extract the validation errors from a request.
         const errors = validationResult(req);
 
-        // Create a genre object with escaped and trimmed data.
+        // Creem un objecte editorial amb el nom que el formulari ens ha donat
         var editorial = new Editorial(
           { name: req.body.name }
         );
@@ -78,21 +75,19 @@ exports.editorial_create_post = [
         return;
         }
         else {
-            // Data from form is valid.
-            // Check if Genre with same name already exists.
+            // Es comprova que no existeix una editorial amb el mateix nom
             Editorial.findOne({ 'name': req.body.name })
                 .exec( function(err, found_editorial) {
                      if (err) { return next(err); }
 
                      if (found_editorial) {
-                         // Genre exists, redirect to its detail page.
                          res.redirect(found_editorial.url);
                      }
                      else {
 
                          editorial.save(function (err) {
                            if (err) { return next(err); }
-                           // Genre saved. Redirect to genre detail page.
+                           // Si no existeix, el crea i redirecciona a editorial_detail
                            res.redirect(editorial.url);
                          });
 
@@ -103,7 +98,7 @@ exports.editorial_create_post = [
     }
 ];
 
-// Display Genre delete form on GET.
+// Funcio per eliminar una editorial
 exports.editorial_delete_get = function(req, res, next) {
 
     async.parallel({

@@ -16,10 +16,8 @@ var Author = require('./models/author')
 var Genre = require('./models/genre')
 var BookInstance = require('./models/bookinstance')
 
-
 var Editorial = require('./models/editorial') //declarem els models editorial i rating
-var rating = require('./models/rating')
-
+var Rating = require('./models/rating')
 
 var mongoose = require('mongoose');
 var mongoDB = userArgs[0];
@@ -27,6 +25,7 @@ mongoose.connect(mongoDB, { useNewUrlParser: true });
 mongoose.Promise = global.Promise;
 var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
+
 
 var authors = []
 var genres = []
@@ -89,10 +88,10 @@ function editorialCreate(name, cb) { //Funció on creem una editorial
       return;
     }
     console.log('New Editorial: ' + editorial);
-    editorials.push(editorial)
+    editorials.push(editorial);
     cb(null, editorial);
+  } );
 }
-
 
 
 
@@ -257,7 +256,7 @@ function createBookInstances(cb) {
 async.series([
     createGenreAuthors,
     createBooks,
-    createBookInstances
+    createBookInstances,
 ],
 // Optional callback
 function(err, results) {

@@ -16,3 +16,16 @@ block content
 
       else
         p This editorial has no books
+
+    form(method='POST' action=editorial.url+'/delete')
+      div.form-group
+        input#id.form-control(type='hidden',name='id', required='true', value=editorial._id )
+
+      button.btn.btn-danger(type='submit') Delete
+    
+
+    form(method='POST' action=editorial.url+'/update')
+      div.form-group
+        input#id.form-control(type='hidden',name='id', required='true', value=editorial._id )
+
+      button.btn.btn-primary(type='submit') Update
