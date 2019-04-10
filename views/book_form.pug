@@ -7,6 +7,7 @@ block content
     div.form-group
       label(for='title') Title:
       input#title.form-control(type='text', placeholder='Name of book' name='title' required='true' value=(undefined===book ? '' : book.title) )
+      
     div.form-group
       label(for='author') Author:
       select#author.form-control(type='select' placeholder='Select author' name='author' required='true' )
@@ -22,6 +23,24 @@ block content
             ) #{author.name}
           else
             option(value=author._id) #{author.name}
+
+    div.form-group
+      label(for='editorial') Editorial:
+      select#editorial.form-control(type='select' placeholder='Select editorial' name='editorial' required='true' )
+        for editorial in editorials
+          if book
+            //- Handle GET form, where book.editorial is an object, and POST form, where it is a string.
+            option(
+              value=editorial._id
+              selected=(
+                editorial._id.toString()==book.editorial._id
+                || editorial._id.toString()==book.editorial
+              ) ? 'selected' : false
+            ) #{editorial.name}
+          else
+            option(value=editorial._id) #{editorial.name}
+
+
     div.form-group
       label(for='summary') Summary:
       input#summary.form-control(type='textarea', placeholder='Summary' name='summary' value=(undefined===book ? '' : book.summary) required='true')

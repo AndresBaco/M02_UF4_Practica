@@ -1,6 +1,7 @@
 var Book = require('../models/book');
 var Author = require('../models/author');
 var Genre = require('../models/genre');
+var Editorial = require('../models/editorial');
 var BookInstance = require('../models/bookinstance');
 
 const { body,validationResult } = require('express-validator/check');
@@ -26,6 +27,10 @@ exports.index = function(req, res) {
         genre_count: function(callback) {
             Genre.count(callback);
         },
+        editorial_count: function(callback) {
+            Editorial.count(callback);
+        },
+
     }, function(err, results) {
         res.render('index', { title: 'Local Library Home', error: err, data: results });
     });
@@ -54,6 +59,7 @@ exports.book_detail = function(req, res, next) {
             Book.findById(req.params.id)
               .populate('author')
               .populate('genre')
+              .populate('editorial')
               .exec(callback);
         },
         book_instance: function(callback) {
@@ -88,9 +94,12 @@ exports.book_create_get = function(req, res, next) {
         genres: function(callback) {
             Genre.find(callback);
         },
+        editorials: function(callback) {
+            Editorial.find(callback);
+        },
     }, function(err, results) {
         if (err) { return next(err); }
-        res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres });
+        res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres, editorials:results.editorials });
     });
 
 };
@@ -117,6 +126,7 @@ exports.book_create_post = [
     // Sanitize fields.
     sanitizeBody('*').escape(),
     sanitizeBody('genre.*').escape(),
+    sanitizeBody('editorial.*').escape(),
     // Process request after validation and sanitization.
     (req, res, next) => {
         
@@ -130,7 +140,8 @@ exports.book_create_post = [
             author: req.body.author,
             summary: req.body.summary,
             isbn: req.body.isbn,
-            genre: req.body.genre
+            genre: req.body.genre,
+            editorial: req.body.editorial
            });
 
         if (!errors.isEmpty()) {
@@ -144,6 +155,9 @@ exports.book_create_post = [
                 genres: function(callback) {
                     Genre.find(callback);
                 },
+                editorials: function(callback) {
+                    Editorial.find(callback);
+                },
             }, function(err, results) {
                 if (err) { return next(err); }
 
@@ -153,7 +167,7 @@ exports.book_create_post = [
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                res.render('book_form', { title: 'Create Book',authors:results.authors, genres:results.genres, editorials:results.editorials, book: book, errors: errors.array() });
             });
             return;
         }
@@ -175,7 +189,11 @@ exports.book_delete_get = function(req, res, next) {
 
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+            Book.findById(req.params.id)
+                .populate('author')
+                .populate('genre')
+                .populate('editorial')
+            .exec(callback);
         },
         book_bookinstances: function(callback) {
             BookInstance.find({ 'book': req.params.id }).exec(callback);
@@ -198,7 +216,11 @@ exports.book_delete_post = function(req, res, next) {
 
     async.parallel({
         book: function(callback) {
-            Book.findById(req.body.id).populate('author').populate('genre').exec(callback);
+            Book.findById(req.body.id)
+                .populate('author')
+                .populate('genre')
+                .populate('editorial')
+            .exec(callback);
         },
         book_bookinstances: function(callback) {
             BookInstance.find({ 'book': req.body.id }).exec(callback);
@@ -230,13 +252,16 @@ exports.book_update_get = function(req, res, next) {
     // Get book, authors and genres for form.
     async.parallel({
         book: function(callback) {
-            Book.findById(req.params.id).populate('author').populate('genre').exec(callback);
+            Book.findById(req.params.id).populate('author').populate('genre').populate('editorial').exec(callback);
         },
         authors: function(callback) {
             Author.find(callback);
         },
         genres: function(callback) {
             Genre.find(callback);
+        },
+        editorials: function(callback) {
+            Editorial.find(callback);
         },
         }, function(err, results) {
             if (err) { return next(err); }
@@ -254,7 +279,7 @@ exports.book_update_get = function(req, res, next) {
                     }
                 }
             }
-            res.render('book_form', { title: 'Update Book', authors:results.authors, genres:results.genres, book: results.book });
+            res.render('book_form', { title: 'Update Book', authors: results.authors, editorials: results.editorials, genres: results.genres, book: results.book });
         });
 
 };
@@ -271,18 +296,21 @@ exports.book_update_post = [
             else
             req.body.genre=new Array(req.body.genre);
         }
+
         next();
     },
    
     // Validate fields.
     body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
     body('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
+    body('editorial', 'Editorial must not be empty.').isLength({ min: 1 }).trim(),
     body('summary', 'Summary must not be empty.').isLength({ min: 1 }).trim(),
     body('isbn', 'ISBN must not be empty').isLength({ min: 1 }).trim(),
 
     // Sanitize fields.
     sanitizeBody('title').escape(),
     sanitizeBody('author').escape(),
+    sanitizeBody('editorial').escape(),
     sanitizeBody('summary').escape(),
     sanitizeBody('isbn').escape(),
     sanitizeBody('genre.*').escape(),
@@ -299,6 +327,7 @@ exports.book_update_post = [
             author: req.body.author,
             summary: req.body.summary,
             isbn: req.body.isbn,
+            editorial: req.body.editorial,
             genre: (typeof req.body.genre==='undefined') ? [] : req.body.genre,
             _id:req.params.id // This is required, or a new ID will be assigned!
            });
@@ -314,6 +343,9 @@ exports.book_update_post = [
                 genres: function(callback) {
                     Genre.find(callback);
                 },
+                editorials: function(callback) {
+                    Editorial.find(callback);
+                },
             }, function(err, results) {
                 if (err) { return next(err); }
 
@@ -323,7 +355,7 @@ exports.book_update_post = [
                         results.genres[i].checked='true';
                     }
                 }
-                res.render('book_form', { title: 'Update Book',authors:results.authors, genres:results.genres, book: book, errors: errors.array() });
+                res.render('book_form', { title: 'Update Book',authors:results.authors, editorials:results.editorials, genres:results.genres, book: book, errors: errors.array() });
             });
             return;
         }
@@ -337,4 +369,3 @@ exports.book_update_post = [
         }
     }
 ];
-

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "node ./bin/www",
     "dev": "set DEBUG=express:* & nodemon ./bin/www"
+
   },
   "devDependencies": {
     "nodemon": "^1.18.10"
