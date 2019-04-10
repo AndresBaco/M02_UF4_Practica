@@ -14,10 +14,10 @@ var async = require('async')
 var Book = require('./models/book')
 var Author = require('./models/author')
 var Genre = require('./models/genre')
-
-var Editorial = require('./models/editorial')
-
 var BookInstance = require('./models/bookinstance')
+
+
+var Editorial = require('./models/editorial') //declarem els models editorial i rating
 var rating = require('./models/rating')
 
 
@@ -31,7 +31,8 @@ db.on('error', console.error.bind(console, 'MongoDB connection error:'));
 var authors = []
 var genres = []
 var books = []
-var editorials = []
+
+var editorials = [] //Creem les arrays on aniran les editorials i els ratings
 var bookinstances = []
 
 function authorCreate(first_name, family_name, d_birth, d_death, cb) {
@@ -77,7 +78,9 @@ function ratingCreate(nota, cb) {
     cb(null, rating);
   }   );
 }
-function editorialCreate(name, cb) {
+
+
+function editorialCreate(name, cb) { //Funció on creem una editorial
   var editorial = new Editorial({ name: name });
        
   editorial.save(function (err) {

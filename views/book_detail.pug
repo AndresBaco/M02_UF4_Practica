@@ -14,6 +14,7 @@ block content
       a(href=val.url) #{val.name}
       |, 
 
+    
   hr
   
   if book_instances.length
@@ -24,37 +25,6 @@ block content
 
       h4 Copies
     
-
-    each val in book_instances
-      hr
-      if val.status=='Available'
-        p.text-success #{val.status}
-      else if val.status=='Maintenance'
-        p.text-danger #{val.status}
-      else
-        p.text-warning #{val.status} 
-      p #[strong Imprint:] #{val.imprint}
-      if val.status!='Available'
-        p #[strong Due back:] #{val.due_back}
-      p #[strong Id:]&nbsp;
-        a(href=val.url) #{val._id}
-      else
-      p There are no copies of this book in the library.
-  form(method='POST' action=book.url+'/rate')
-    h4 Display your vote:
-    input(
-          type='number'
-          name='rating'
-          value='5'
-          max=5
-          min=0
-        )
-    button(type='submit' class='btn btn-info btn-lg') Vote!
-  hr
-  p
-    a(href=book.url+'/delete') Delete Book
-  p
-
         each book_copy in book_instances
           hr
           if book_copy.status=='Available'
@@ -69,7 +39,19 @@ block content
           p #[strong Id:] 
             a(href=book_copy.url) #{book_copy._id}
 
-  else
+  form(method='POST' action=book.url+'/rate')
+    h4 Display your vote:
+    input(
+          type='number'
+          name='rating'
+          value='5'
+          max=5
+          min=0
+        )
+    button(type='submit' class='btn btn-info btn-lg') Vote!
+  hr
+  p
+
     form(method='POST' action=book.url+'/delete')
       div.form-group
         input#id.form-control(type='hidden',name='id', required='true', value=book._id )
