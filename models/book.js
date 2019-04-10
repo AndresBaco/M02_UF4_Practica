@@ -9,7 +9,7 @@ var BookSchema = new Schema(
     summary: {type: String, required: true},
     isbn: {type: String, required: true},
     genre: [{type: Schema.Types.ObjectId, ref: 'Genre'}],
-    rating: [{type: Schema.Types.ObjectId, ref: 'Rating'}]
+    rating: [{type: Schema.Types.ObjectId, ref: 'Rating'}],
     editorial: {type: Schema.Types.ObjectId, ref: 'Editorial', required: true}
   }
 );

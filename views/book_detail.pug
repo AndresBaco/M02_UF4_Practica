@@ -38,8 +38,7 @@ block content
         p #[strong Due back:] #{val.due_back}
       p #[strong Id:]&nbsp;
         a(href=val.url) #{val._id}
-      
-    else
+      else
       p There are no copies of this book in the library.
   form(method='POST' action=book.url+'/rate')
     h4 Display your vote:
