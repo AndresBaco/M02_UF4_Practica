@@ -15,6 +15,7 @@ var Book = require('./models/book')
 var Author = require('./models/author')
 var Genre = require('./models/genre')
 var BookInstance = require('./models/bookinstance')
+var rating = require('./models/rating')
 
 
 var mongoose = require('mongoose');
@@ -60,6 +61,21 @@ function genreCreate(name, cb) {
     cb(null, genre);
   }   );
 }
+
+function ratingCreate(nota, cb) {
+  var rating = new Rating({ name: name });
+       
+  rating.save(function (err) {
+    if (err) {
+      cb(err, null);
+      return;
+    }
+    console.log('New rating: ' + rating);
+    ratings.push(rating)
+    cb(null, rating);
+  }   );
+}
+
 
 function bookCreate(title, summary, isbn, author, genre, cb) {
   bookdetail = { 

@@ -29,9 +29,19 @@ block content
         p #[strong Due back:] #{val.due_back}
       p #[strong Id:]&nbsp;
         a(href=val.url) #{val._id}
- 
+      
     else
       p There are no copies of this book in the library.
+  form(method='POST' action=book.url+'/rate')
+    h4 Display your vote:
+    input(
+          type='number'
+          name='rating'
+          value='5'
+          max=5
+          min=0
+        )
+    button(type='submit' class='btn btn-info btn-lg') Vote!
   hr
   p
     a(href=book.url+'/delete') Delete Book

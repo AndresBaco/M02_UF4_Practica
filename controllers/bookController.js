@@ -73,6 +73,9 @@ exports.book_detail = function(req, res, next) {
     });
 
 };
+exports.rating = function(req, res, next) {
+    console.log("HEEEEEEEEEY");
+};
 
 // Display book create form on GET.
 exports.book_create_get = function(req, res, next) {

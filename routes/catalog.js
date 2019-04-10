@@ -3,6 +3,7 @@ var router = express.Router();
 
 // Require controller modules.
 var book_controller = require('../controllers/bookController');
+var rating_controller = require('../controllers/ratingController');
 var author_controller = require('../controllers/authorController');
 var genre_controller = require('../controllers/genreController');
 var book_instance_controller = require('../controllers/bookinstanceController');
@@ -35,6 +36,9 @@ router.get('/book/:id', book_controller.book_detail);
 
 // GET request for list of all Book items.
 router.get('/books', book_controller.book_list);
+
+// GET request for list of all Genre.
+router.post('/book/:id/rate', rating_controller.rating_create_post);
 
 /// AUTHOR ROUTES ///
 
@@ -113,5 +117,6 @@ router.get('/bookinstance/:id', book_instance_controller.bookinstance_detail);
 
 // GET request for list of all BookInstance.
 router.get('/bookinstances', book_instance_controller.bookinstance_list);
+
 
 module.exports = router;
