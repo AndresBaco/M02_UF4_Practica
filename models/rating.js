@@ -6,6 +6,7 @@ var Schema = mongoose.Schema;
 var RatingSchema = new Schema({
     bookid: {type: Schema.Types.ObjectId, required: true},
     rating: {type: String, required: true, min: 0, max: 5},
+    comment: {type: String, required: false, default:"Sense comentari"}
 
 });
 

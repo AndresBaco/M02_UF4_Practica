@@ -132,6 +132,7 @@ exports.rating_create_post = [
         var rating = new Rating(
           { bookid: req.params.id, 
             rating: req.body.rating,
+            comment: req.body.comment,
           }
         );
 

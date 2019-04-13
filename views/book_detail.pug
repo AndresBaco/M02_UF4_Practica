@@ -55,10 +55,21 @@ block content
     button(type='submit' class='btn btn-info btn-lg') Vote!
   hr
   p
-    p #[strong Rating:] 
-    each bookid, index in rating
-       p #[strong Votació:] #{bookid.rating}
-       
+    p #[h3 Valoracions] 
+    br
+
+    if rating != ""  
+      each bookid in rating
+         p #[h4 Usuari anònim:]
+         p #[strong Votació:] #{bookid.rating}
+         if bookid.comment != ""
+          p #[strong Comentari:] #{bookid.comment}
+          br
+         else
+          p Sense comentari
+          br
+    else
+      p Encara no hi ha valoracions :(
 
     form(method='POST' action=book.url+'/delete')
       div.form-group
