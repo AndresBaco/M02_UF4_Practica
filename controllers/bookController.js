@@ -268,7 +268,7 @@ exports.book_update_get = function(req, res, next) {
         genres: function(callback) {
             Genre.find(callback);
         },
-        editorials: function(callback) {
+        editorials: function(callback) { //Busquem totes les editorials
             Editorial.find(callback);
         },
         }, function(err, results) {
@@ -287,7 +287,11 @@ exports.book_update_get = function(req, res, next) {
                     }
                 }
             }
-            res.render('book_form', { title: 'Update Book', authors: results.authors, editorials: results.editorials, genres: results.genres, book: results.book });
+            res.render('book_form', { title: 'Update Book',
+                                      authors: results.authors,
+                                      editorials: results.editorials, //ens emportem les editorials 
+                                      genres: results.genres, 
+                                      book: results.book });
         });
 
 };
@@ -311,14 +315,20 @@ exports.book_update_post = [
     // Validate fields.
     body('title', 'Title must not be empty.').isLength({ min: 1 }).trim(),
     body('author', 'Author must not be empty.').isLength({ min: 1 }).trim(),
-    body('editorial', 'Editorial must not be empty.').isLength({ min: 1 }).trim(),
+
+    //Afegim el camp editorial als validadors
+    body('editorial', 'Editorial must not be empty.').isLength({ min: 1 }).trim(), 
+
     body('summary', 'Summary must not be empty.').isLength({ min: 1 }).trim(),
     body('isbn', 'ISBN must not be empty').isLength({ min: 1 }).trim(),
 
     // Sanitize fields.
     sanitizeBody('title').escape(),
     sanitizeBody('author').escape(),
+
+    //També en els sanadors
     sanitizeBody('editorial').escape(),
+
     sanitizeBody('summary').escape(),
     sanitizeBody('isbn').escape(),
     sanitizeBody('genre.*').escape(),
@@ -351,7 +361,7 @@ exports.book_update_post = [
                 genres: function(callback) {
                     Genre.find(callback);
                 },
-                editorials: function(callback) {
+                editorials: function(callback) { //Agafem totes les editorials
                     Editorial.find(callback);
                 },
             }, function(err, results) {
