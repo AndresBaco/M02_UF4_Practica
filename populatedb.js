@@ -67,8 +67,8 @@ function genreCreate(name, cb) {
   }   );
 }
 
-function ratingCreate(nota, cb) {
-  var rating = new Rating({ name: name });
+function ratingCreate(bookid, rating, cb) {
+  var rating = new Rating({ bookid: bookid, rating: rating });
        
   rating.save(function (err) {
 
@@ -89,8 +89,9 @@ function editorialCreate(name, cb) { //Funció on creem una editorial
       return;
     }
     console.log('New Editorial: ' + editorial);
-    editorials.push(editorial)
+    editorials.push(editorial);
     cb(null, editorial);
+  });
 }
 
 

@@ -4,11 +4,12 @@ block content
 
   h1 #{title}: #{book.title}
   
-  p #[strong Author:] 
+  p #[strong Author:]
     a(href=book.author.url) #{book.author.name}
   p #[strong Summary:] #{book.summary}
   p #[strong ISBN:] #{book.isbn}
   p #[strong Editorial:] #{book.editorial.name}
+  
   p #[strong Genre:] 
     each val in book.genre
       a(href=val.url) #{val.name}
@@ -48,9 +49,16 @@ block content
           max=5
           min=0
         )
+    div.form-group
+            label(for='name') Name:
+            input#name.form-control(type='text', placeholder='Comenta alguna cosa' name='comment')
     button(type='submit' class='btn btn-info btn-lg') Vote!
   hr
   p
+    p #[strong Rating:] 
+    each bookid, index in rating
+       p #[strong Votació:] #{bookid.rating}
+       
 
     form(method='POST' action=book.url+'/delete')
       div.form-group

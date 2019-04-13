@@ -1,5 +1,6 @@
 var Book = require('../models/book');
 var Author = require('../models/author');
+var Rating = require('../models/rating');
 var Genre = require('../models/genre');
 var Editorial = require('../models/editorial');
 var BookInstance = require('../models/bookinstance');
@@ -62,6 +63,12 @@ exports.book_detail = function(req, res, next) {
               .populate('editorial')
               .exec(callback);
         },
+        rating: function(callback) {
+
+            Rating.find({ 'bookid': req.params.id })
+
+              .exec(callback);
+        },
         book_instance: function(callback) {
 
           BookInstance.find({ 'book': req.params.id })
@@ -75,7 +82,8 @@ exports.book_detail = function(req, res, next) {
             return next(err);
         }
         // Successful, so render.
-        res.render('book_detail', { title: 'Title', book:  results.book, book_instances: results.book_instance } );
+        console.log("Els ratings son: "+results.rating)
+        res.render('book_detail', { title: 'Title', book:  results.book, book_instances: results.book_instance, rating: results.rating } );
     });
 
 };

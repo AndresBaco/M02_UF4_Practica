@@ -77,7 +77,7 @@ exports.book_create_post = [
 
 
 // Display detail page for a specific Genre.
-exports.rating_detail = function(req, res, next) {
+exports.rating_book = function(req, res, next) {
 
     async.parallel({
         rating: function(callback) {
@@ -104,7 +104,7 @@ exports.rating_detail = function(req, res, next) {
 
 };
 exports.rating = function(req, res, next) {
-    console.log("El param: "+req.param('rating'))
+    console.log("El param: "+req.param('id'))
     console.log("HEEEEEEEEEY");
 };
 // Display Genre create form on GET.
@@ -115,7 +115,6 @@ exports.rating_create_get = function(req, res, next) {
 
 // Handle Genre create on POST.
 exports.rating_create_post = [
-
     // Validate that the name field is not empty.
     body('name', 'Rating name required').isLength({ min: 1 }).trim(),
 
@@ -127,41 +126,20 @@ exports.rating_create_post = [
 
         // Extract the validation errors from a request.
         const errors = validationResult(req);
-
+        console.log("El param ess:"+req.params.id);
+        console.log("El rating es: "+req.body.rating)
         // Create a genre object with escaped and trimmed data.
         var rating = new Rating(
-          { name: req.body.name }
+          { bookid: req.params.id, 
+            rating: req.body.rating,
+          }
         );
 
-
-        if (!errors.isEmpty()) {
-            // There are errors. Render the form again with sanitized values/error messages.
-            res.render('rating_form', { title: 'Create Rating', rating: rating, errors: errors.array()});
-        return;
-        }
-        else {
-            // Data from form is valid.
-            // Check if Genre with same name already exists.
-            Rating.findOne({ 'name': req.body.name })
-                .exec( function(err, found_rating) {
-                     if (err) { return next(err); }
-
-                     if (found_rating) {
-                         // Genre exists, redirect to its detail page.
-                         res.redirect(found_rating.url);
-                     }
-                     else {
-
-                         rating.save(function (err) {
+        rating.save(function (err) {
                            if (err) { return next(err); }
                            // Genre saved. Redirect to genre detail page.
-                           res.redirect(rating.url);
+                           res.redirect("/catalog/book/"+req.params.id);
                          });
-
-                     }
-
-                 });
-        }
     }
 ];
 
