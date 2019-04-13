@@ -64,10 +64,21 @@ block content
          p #[strong Votació:] #{bookid.rating}
          if bookid.comment != ""
           p #[strong Comentari:] #{bookid.comment}
+          form(method='POST' action=bookid._id+'/deleteRate/'+bookid.bookid)
+            div.form-group
+              input#id.form-control(type='hidden',name='id', required='true', value=book._id )
+
+            button.btn.btn-danger(type='submit') Eliminar Valoració
           br
          else
+          form(method='POST' action=bookid._id+'/deleteRate/'+bookid.bookid)
+            div.form-group
+              input#id.form-control(type='hidden',name='id', required='true', value=book._id )
+
+            button.btn.btn-danger(type='submit') Eliminar Valoració
           p Sense comentari
           br
+
     else
       p Encara no hi ha valoracions :(
 

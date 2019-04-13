@@ -41,6 +41,9 @@ router.get('/books', book_controller.book_list);
 // GET request for list of all Genre.
 router.post('/book/:id/rate', rating_controller.rating_create_post);
 
+// POST request to delete Book.
+router.post('/book/:bookid/deleteRate/:id', rating_controller.rating_delete_post);
+
 /// AUTHOR ROUTES ///
 
 // GET request for creating Author. NOTE This must come before route for id (i.e. display author).

@@ -167,31 +167,19 @@ exports.rating_delete_get = function(req, res, next) {
 
 // Handle Genre delete on POST.
 exports.rating_delete_post = function(req, res, next) {
-
+    console.log("Aqui llegaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    console.log("El id del rating es: "+req.params.bookid)
+    console.log("El book id es: "+req.params.id)
+    let idlibro = req.params.id;
     async.parallel({
         rating: function(callback) {
-            Rating.findById(req.params.id).exec(callback);
+            Rating.findByIdAndDelete(req.params.bookid, callback);
         },
-        rating_books: function(callback) {
-            Book.find({ 'rating': req.params.id }).exec(callback);
-        },
-    }, function(err, results) {
+    }, function(err) {
         if (err) { return next(err); }
         // Success
-        if (results.rating_books.length > 0) {
-            // Genre has books. Render in same way as for GET route.
-            res.render('rating_delete', { title: 'Delete Rating', rating: results.rating, rating_books: results.rating_books } );
-            return;
-        }
-        else {
-            // Genre has no books. Delete object and redirect to the list of genres.
-            Rating.findByIdAndRemove(req.body.id, function deleteRating(err) {
-                if (err) { return next(err); }
-                // Success - go to genres list.
-                res.redirect('/catalog/ratings');
-            });
-
-        }
+        //res.redirect("/catalog/book/"+idlibro);
+        res.redirect("/catalog/book/"+req.params.id);
     });
 
 };
